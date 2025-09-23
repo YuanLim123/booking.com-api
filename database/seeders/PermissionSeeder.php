@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
-use App\Models\Permission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 
 class PermissionSeeder extends Seeder
 {
@@ -22,9 +22,9 @@ class PermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $key => $roles) {
-            $permissions = Permission::create(['name' => $key]);
+            $permission = Permission::create(['name' => $key]);
             foreach ($roles as $role) {
-                $allRoles[$role]->permissions()->attach($permissions->id);
+                $allRoles[$role]->givePermissionTo($permission);
             }
         }
     }
