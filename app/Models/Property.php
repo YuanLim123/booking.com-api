@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Apartment;
+use App\Models\City;
 use App\Observers\PropertyObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 class Property extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'owner_id',
         'name',
@@ -30,5 +32,10 @@ class Property extends Model
         parent::booted();
 
         self::observe(PropertyObserver::class);
+    }
+
+    public function apartments()
+    {
+        return $this->hasMany(Apartment::class);
     }
 }

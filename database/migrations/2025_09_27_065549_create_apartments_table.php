@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('apartments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('property_id')->constrained();
+            $table->string('name');
+            $table->unsignedInteger('capacity_adults');
+            $table->unsignedInteger('capacity_children');
             $table->timestamps();
         });
     }
