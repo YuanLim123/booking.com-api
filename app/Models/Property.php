@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Observers\PropertyObserver;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Property extends Model
 {
+    use HasFactory;
+    
     protected $fillable = [
         'owner_id',
         'name',
