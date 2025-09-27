@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\PropertyObserver;
 use Illuminate\Database\Eloquent\Model;
 
 class Property extends Model
@@ -19,5 +20,12 @@ class Property extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public static function booted()
+    {
+        parent::booted();
+
+        self::observe(PropertyObserver::class);
     }
 }
