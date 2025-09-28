@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Public;
 use App\Models\Geoobject;
 use App\Models\Property;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PropertySearchResource;
 use Illuminate\Http\Request;
 
 class PropertySearchController extends Controller
 {
     public function __invoke(Request $request)
     {
-        return Property::query()
-        // check tmr
+        $properties = Property::query()
             ->with([
                 'city',
                 'apartments.apartmentType',
@@ -47,5 +47,7 @@ class PropertySearchController extends Controller
                 });
             })
             ->get();
+
+        return PropertySearchResource::collection($properties);
     }
 }
