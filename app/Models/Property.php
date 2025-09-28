@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Apartment;
-use App\Models\City;
 use App\Observers\PropertyObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
