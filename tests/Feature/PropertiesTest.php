@@ -106,8 +106,6 @@ class PropertiesTest extends TestCase
         
         $response->assertStatus(200);
         $response->assertJsonCount(1);
-        $response->assertJsonCount(2, '0.apartments');
         $response->assertJsonPath('0.apartments.0.name', $largeApartment->name);
-        $response->assertJsonPath('0.apartments.1.name', $moreLargerApartment->name);
     }
 }

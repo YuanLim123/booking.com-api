@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\User\BookingController;
 use App\Http\Controllers\Owner\PropertyController;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 Route::post('auth/register', RegisterController::class);
+Route::post('auth/login', LoginController::class);
 
 Route::middleware(['auth:sanctum', GateDefineMiddleware::class])->group(function () {
 

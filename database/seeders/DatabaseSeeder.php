@@ -27,6 +27,10 @@ class DatabaseSeeder extends Seeder
             CountrySeeder::class,
             CitySeeder::class,
             GeoobjectSeeder::class,
+
+            PropertySeeder::class,
+            ApartmentSeeder::class,
+            RoomSeeder::class,
         ]);
 
     }
