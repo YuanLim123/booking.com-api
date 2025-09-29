@@ -7,6 +7,12 @@ use App\Models\Property;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\City;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\AdminUserSeeder;
+use Database\Seeders\CountrySeeder;
+use Database\Seeders\CitySeeder;
+use Database\Seeders\GeoobjectSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -14,6 +20,19 @@ use Tests\TestCase;
 class PropertiesTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed([
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            AdminUserSeeder::class,
+            CountrySeeder::class,
+            CitySeeder::class,
+            GeoobjectSeeder::class,
+        ]);
+    }
 
     public function test_property_owner_has_access_to_properties_feature()
     {

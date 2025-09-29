@@ -5,11 +5,24 @@ namespace Tests\Feature;
 use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\AdminUserSeeder;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed([
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            AdminUserSeeder::class,
+        ]);
+    }
 
     public function test_registration_fails_with_admin_role()
     {

@@ -13,12 +13,31 @@ use App\Models\Country;
 use App\Models\Property;
 use App\Models\Role;
 use App\Models\User;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\AdminUserSeeder;
+use Database\Seeders\CountrySeeder;
+use Database\Seeders\CitySeeder;
+use Database\Seeders\GeoobjectSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class PropertySearchTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed([
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            AdminUserSeeder::class,
+            CountrySeeder::class,
+            CitySeeder::class,
+            GeoobjectSeeder::class,
+        ]);
+    }
 
     public function test_property_search_by_city_returns_correct_results(): void
     {
