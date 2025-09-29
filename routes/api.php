@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\User\BookingController;
 use App\Http\Controllers\Owner\PropertyController;
 use App\Http\Controllers\Public\PropertySearchController;
+use App\Http\Controllers\Public\PropertyController as PubliPropertyController;
 use App\Http\Middleware\GateDefineMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,3 +30,4 @@ Route::middleware(['auth:sanctum', GateDefineMiddleware::class])->group(function
 });
 
 Route::get('search', PropertySearchController::class);
+Route::get('properties/{property}', PubliPropertyController::class);

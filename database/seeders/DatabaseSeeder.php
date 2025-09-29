@@ -31,6 +31,9 @@ class DatabaseSeeder extends Seeder
             PropertySeeder::class,
             ApartmentSeeder::class,
             RoomSeeder::class,
+
+            FacilityCategorySeeder::class,
+            FacilitySeeder::class,
         ]);
 
     }
