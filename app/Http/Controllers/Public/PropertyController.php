@@ -22,7 +22,7 @@ class PropertyController extends Controller
                     ->orderBy('capacity_children');
             }, 'apartments.facilities']);
         } else {
-            $property->load(['apartments', 'apartments.facilities']);
+            $property->load(['apartments.facilities']);
         }
 
         return new PropertySearchResource($property);
