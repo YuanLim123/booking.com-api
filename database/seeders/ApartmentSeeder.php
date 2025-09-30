@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Apartment;
+use App\Models\Facility;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,8 +14,10 @@ class ApartmentSeeder extends Seeder
      */
     public function run(): void
     {
-        Apartment::factory()->create([
-            
-        ]);
+        $facilities = Facility::take(3)->get();
+        
+        Apartment::factory()
+            ->hasAttached($facilities)
+            ->create();
     }
 }

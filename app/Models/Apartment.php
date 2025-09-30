@@ -67,4 +67,11 @@ class Apartment extends Model
     {
         return $this->belongsToMany(Facility::class);
     }
+
+    public function getFacilityCategoriesAttribute()
+    {
+        return $this->facilities->groupBy('category.name')->mapWithKeys(fn ($items, $key) => [$key => $items->pluck('name')]);
+    }
+
+
 }

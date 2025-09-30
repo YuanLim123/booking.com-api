@@ -28,12 +28,12 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             GeoobjectSeeder::class,
 
+            FacilityCategorySeeder::class,
+            FacilitySeeder::class,
+            
             PropertySeeder::class,
             ApartmentSeeder::class,
             RoomSeeder::class,
-
-            FacilityCategorySeeder::class,
-            FacilitySeeder::class,
         ]);
 
     }
