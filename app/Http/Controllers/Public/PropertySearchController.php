@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Models\Facility;
 use App\Models\Geoobject;
 use App\Models\Property;
 use App\Http\Controllers\Controller;
@@ -49,8 +50,25 @@ class PropertySearchController extends Controller
                         ->take(1);
                 });
             })
+            ->when($request->facilities, function ($query) use ($request) {
+                $query->whereHas('facilities', function ($query) use ($request) {
+                    $query->whereIn('id', $request->facilities);
+                });
+            })
             ->get();
 
-        return PropertySearchResource::collection($properties);
+        $facilities = Facility::query()
+            ->whereNull('category_id')
+            ->withCount(['properties' => function ($property) use ($properties) {
+                $property->whereIn('id', $properties->pluck('id'));
+            }])
+            ->where('properties_count', '>', 0)
+            ->get()
+            ->pluck('properties_count', 'name');
+
+        return [
+            'properties' => PropertySearchResource::collection($properties),
+            'facilities' => $facilities,
+        ];
     }
 }

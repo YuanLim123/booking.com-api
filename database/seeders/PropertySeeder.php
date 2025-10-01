@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Facility;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Property;
@@ -19,8 +20,16 @@ class PropertySeeder extends Seeder
             'role_id' => Role::ROLE_OWNER,
         ]);
 
-        Property::factory()->count(2)->create([
-            'owner_id' => $owner->id,
-        ]);
+        $facilities = Facility::query()
+            ->whereNull('category_id')
+            ->take(3)
+            ->get();
+
+        Property::factory()
+            ->count(1)
+            ->hasAttached($facilities)
+            ->create([
+                'owner_id' => $owner->id,
+            ]);
     }
 }
