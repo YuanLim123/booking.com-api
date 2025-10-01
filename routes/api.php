@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\User\BookingController;
 use App\Http\Controllers\Owner\PropertyController;
+use App\Http\Controllers\Owner\PropertyPhotoController;
 use App\Http\Controllers\Public;
 use App\Http\Middleware\GateDefineMiddleware;
 use Illuminate\Http\Request;
@@ -21,6 +22,8 @@ Route::middleware(['auth:sanctum', GateDefineMiddleware::class])->group(function
     Route::prefix('owner')->group(function () {
         Route::get('properties', [PropertyController::class, 'index']);
         Route::post('properties', [PropertyController::class, 'store']);
+        Route::post('properties/{property}/photos', [PropertyPhotoController::class, 'store']);
+        Route::get('properties/{property}/photos', [PropertyPhotoController::class, 'show']);
     });
 
     Route::prefix('user')->group(function () {
