@@ -17,7 +17,11 @@ class PropertySearchController extends Controller
             ->with([
                 'city',
                 'apartments.apartmentType',
-                'apartments.rooms.beds.bedType'
+                'apartments.rooms.beds.bedType',
+                'media' => function ($query) {
+                    $query
+                        ->orderBy('position');
+                },
             ])
             ->when($request->city, function ($query) use ($request) {
                 $query->where('city_id', $request->city);
@@ -56,7 +60,6 @@ class PropertySearchController extends Controller
                 });
             })
             ->get();
-
         $facilities = Facility::query()
             ->whereNull('category_id')
             ->withCount(['properties' => function ($property) use ($properties) {
@@ -65,7 +68,6 @@ class PropertySearchController extends Controller
             ->where('properties_count', '>', 0)
             ->get()
             ->pluck('properties_count', 'name');
-
         return [
             'properties' => PropertySearchResource::collection($properties),
             'facilities' => $facilities,

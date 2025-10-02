@@ -24,6 +24,15 @@ Route::middleware(['auth:sanctum', GateDefineMiddleware::class])->group(function
         Route::post('properties', [PropertyController::class, 'store']);
         Route::post('properties/{property}/photos', [PropertyPhotoController::class, 'store']);
         Route::get('properties/{property}/photos', [PropertyPhotoController::class, 'show']);
+        Route::delete('properties/{property}/photos', [PropertyPhotoController::class, 'destroy']);
+        Route::post(
+            'properties/{property}/photos/{photo}/reorder/{newPosition}',
+            [PropertyPhotoController::class, 'reorder']
+        );
+        Route::post(
+            'properties/{property}/photos/reorder',
+            [PropertyPhotoController::class, 'reorderWithSpatieOrdering']
+        );
     });
 
     Route::prefix('user')->group(function () {
