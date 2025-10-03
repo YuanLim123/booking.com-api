@@ -19,7 +19,6 @@ class ApartmentController extends Controller
         //     'facility_categories',
         //     $apartment->facilities->groupBy('category.name')->mapWithKeys(fn ($items, $key) => [$key => $items->pluck('name')])
         // );
-        dd('test');
         return new ApartmentDetailsResource($apartment);
     }
 }
