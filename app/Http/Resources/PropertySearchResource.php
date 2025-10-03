@@ -21,7 +21,7 @@ class PropertySearchResource extends JsonResource
             'lat' => $this->lat,
             'long' => $this->long,
             'apartments' => ApartmentSearchResource::collection($this->apartments),
-            'photos' => $this->whenLoaded('media')->map(fn($media) => $media->getUrl('thumbnail')),
+            'photos' => $this->whenLoaded('media') ? $this->media->map(fn($media) => $media->getUrl('thumbnail')) : [],
         ];
     }
 }

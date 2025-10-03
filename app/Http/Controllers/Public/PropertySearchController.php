@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Models\Facility;
 use App\Models\Geoobject;
 use App\Models\Property;
+use App\Models\ApartmentPrice;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PropertySearchResource;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class PropertySearchController extends Controller
                 'city',
                 'apartments.apartmentType',
                 'apartments.rooms.beds.bedType',
+                'apartments.prices',
                 'media' => function ($query) {
                     $query
                         ->orderBy('position');
@@ -59,7 +61,18 @@ class PropertySearchController extends Controller
                     $query->whereIn('id', $request->facilities);
                 });
             })
+            ->when($request->price_from, function ($query) use ($request) {
+                $query->whereHas('apartments.prices', function ($query) use ($request) {
+                    $query->where('price', '>=', $request->price_from);
+                });
+            })
+            ->when($request->price_to, function ($query) use ($request) {
+                $query->whereHas('apartments.prices', function ($query) use ($request) {
+                    $query->where('price', '<=', $request->price_to);
+                });
+            })
             ->get();
+            
         $facilities = Facility::query()
             ->whereNull('category_id')
             ->withCount(['properties' => function ($property) use ($properties) {
