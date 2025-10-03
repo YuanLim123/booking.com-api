@@ -71,7 +71,7 @@ class ApartmentPriceTest extends TestCase
     public function test_apartment_calculate_price_2_days_correctly()
     {
         $apartment = $this->create_apartment();
-        ApartmentPrice::create([
+        $apt = ApartmentPrice::create([
             'apartment_id' => $apartment->id,
             'start_date' => now()->toDateString(),
             'end_date' => now()->addDays(10)->toDateString(),
@@ -107,6 +107,37 @@ class ApartmentPriceTest extends TestCase
         );
         $this->assertEquals(3 * 100 + 2 * 90, $totalPrice);
     }
+
+    public function test_apartment_calculate_price_multiple_ranges_correctly_more_complex_version()
+    {
+        $apartment = $this->create_apartment();
+        ApartmentPrice::create([
+            'apartment_id' => $apartment->id,
+            'start_date' => now()->toDateString(),
+            'end_date' => now()->addDays(2)->toDateString(),
+            'price' => 100
+        ]);
+        ApartmentPrice::create([
+            'apartment_id' => $apartment->id,
+            'start_date' => now()->addDays(3)->toDateString(),
+            'end_date' => now()->addDays(6)->toDateString(),
+            'price' => 90
+        ]);
+        ApartmentPrice::create([
+            'apartment_id' => $apartment->id,
+            'start_date' => now()->addDays(7)->toDateString(),
+            'end_date' => now()->addDays(10)->toDateString(),
+            'price' => 120
+        ]);
+
+        $totalPrice = $apartment->calculatePriceForDates(
+            now()->addDays(2)->toDateString(),
+            now()->addDays(8)->toDateString()
+        );
+
+        $this->assertEquals(1 * 100 + 4 * 90 + 2 * 120, $totalPrice);
+    }
+
 
     public function test_property_search_filters_by_price()
     {
@@ -152,11 +183,13 @@ class ApartmentPriceTest extends TestCase
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&price_from=100');
         $response->assertStatus(200);
         $response->assertJsonCount(1, 'properties');
+        $response->assertJsonFragment(['id' => $property2->id]);
 
         // Second case - max price set: 1 returned
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&price_to=100');
         $response->assertStatus(200);
         $response->assertJsonCount(1, 'properties');
+        $response->assertJsonFragment(['id' => $property->id]);
 
         // Third case - both min and max price set: 2 returned
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&price_from=50&price_to=150');

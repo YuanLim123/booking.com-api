@@ -19,7 +19,12 @@ class PropertySearchController extends Controller
                 'city',
                 'apartments.apartmentType',
                 'apartments.rooms.beds.bedType',
-                'apartments.prices',
+                'apartments.prices' => function ($query) use ($request) {
+                    $query->validForRange([
+                        $request->start_date ?? now()->addDay()->toDateString(),
+                        $request->end_date ?? now()->addDays(2)->toDateString(),
+                    ]);
+                },
                 'media' => function ($query) {
                     $query
                         ->orderBy('position');
@@ -72,7 +77,7 @@ class PropertySearchController extends Controller
                 });
             })
             ->get();
-            
+
         $facilities = Facility::query()
             ->whereNull('category_id')
             ->withCount(['properties' => function ($property) use ($properties) {
