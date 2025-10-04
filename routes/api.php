@@ -36,7 +36,7 @@ Route::middleware(['auth:sanctum', GateDefineMiddleware::class])->group(function
     });
 
     Route::prefix('user')->group(function () {
-        Route::get('bookings', [BookingController::class, 'index']);
+        Route::apiResource('bookings', BookingController::class)->withTrashed(['show']);
     });
 });
 
