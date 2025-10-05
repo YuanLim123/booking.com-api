@@ -42,6 +42,17 @@ class BookingController extends Controller
         return new BookingResource($booking);
     }
 
+    public function update(Booking $booking, UpdateBookingRequest $request)
+    {
+        if ($booking->user_id != auth()->id()) {
+            abort(403);
+        }
+
+        $booking->update($request->validated());
+
+        return new BookingResource($booking);
+    }
+
     public function destroy(Booking $booking)
     {
         Gate::authorize('bookings-manage');
