@@ -21,16 +21,18 @@ class PropertyFactory extends Factory
      */
     public function definition(): array
     {
-        $geoobject = Geoobject::first();
+        //$geoobject = Geoobject::first();
 
         return [
-            'owner_id' => User::where('role_id', Role::ROLE_OWNER)->value('id'), // value('id') is a shorter way of doing ->first()->id.
+            //'owner_id' => User::where('role_id', Role::ROLE_OWNER)->inRandomOrder()->value('id'),// value('id') is a shorter way of doing ->first()->id.
             'name' => fake()->text(20),
-            'city_id' => City::value('id'),
+            //'city_id' => City::inRandomOrder()->value('id'),
             'address_street' => fake()->streetAddress(),
             'address_postcode' => fake()->postcode(),
-            'lat' => $geoobject->lat,
-            'long' => $geoobject->long,
+            //'lat' => $geoobject->lat,
+            //'long' => $geoobject->long,
+            'lat' => fake()->latitude(),
+            'long' => fake()->longitude(),
         ];
     }
 }
