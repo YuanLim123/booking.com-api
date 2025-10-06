@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Booking;
 use App\Http\Requests\StoreBookingRequest;
+use App\Http\Requests\UpdateBookingRequest;
 use App\Http\Resources\BookingResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
