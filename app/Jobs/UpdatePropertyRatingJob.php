@@ -28,7 +28,7 @@ class UpdatePropertyRatingJob implements ShouldQueue
         }
  
         $property->update([
-            'bookings_avg_rating' => $property->bookings()->avg('rating')
+            'bookings_avg_rating' => $property->bookings->avg('rating')
         ]);
     }
 }
