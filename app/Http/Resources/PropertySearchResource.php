@@ -23,7 +23,7 @@ class PropertySearchResource extends JsonResource
             'apartments' => ApartmentSearchResource::collection($this->apartments),
             'photos' => $this->whenLoaded('media') ? $this->media->map(fn($media) => $media->getUrl('thumbnail')) : [],
             'avg_rating' => $this->bookings_avg_rating ? round($this->bookings_avg_rating, 2) : null,
-            'number_of_bookings' => $this->bookings_count,
+            //'number_of_bookings' => $this->bookings_count,
         ];
     }
 }

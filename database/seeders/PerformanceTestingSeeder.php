@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Laravel\Telescope\Telescope;
 
 class PerformanceTestingSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class PerformanceTestingSeeder extends Seeder
      */
     public function run(): void
     {
+        Telescope::stopRecording();
+
         $this->call([
             RoleSeeder::class,
             AdminUserSeeder::class,
@@ -32,14 +35,14 @@ class PerformanceTestingSeeder extends Seeder
             'count' => 1000
         ]);
         $this->callWith(Performance\PropertySeeder::class, [
-            'count' => 100000
+            'count' => 1000
         ]);
         $this->callWith(Performance\ApartmentSeeder::class, [
-            'count' => 200000
+            'count' => 2000
         ]);
         $this->callWith(Performance\BookingSeeder::class, [
-            'withRatings' => 200000,
-            'withoutRatings' => 200000
+            'withRatings' => 2000,
+            'withoutRatings' => 2000
         ]);
     }
 }

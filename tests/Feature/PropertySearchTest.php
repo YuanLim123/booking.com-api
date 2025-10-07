@@ -447,33 +447,31 @@ class PropertySearchTest extends TestCase
             'capacity_adults' => 2,
             'capacity_children' => 1,
         ]);
-        $apartment3 = Apartment::factory()->create([
-            'name' => 'Premier size apartment',
-            'property_id' => $property2->id,
-            'capacity_adults' => 2,
-            'capacity_children' => 1,
-        ]);
         $user1 = User::factory()->create(['role_id' => Role::ROLE_USER]);
         $user2 = User::factory()->create(['role_id' => Role::ROLE_USER]);
-        Booking::create([
+        $booking1 = Booking::create([
             'apartment_id' => $apartment1->id,
             'user_id' => $user1->id,
             'start_date' => now()->addDay(),
             'end_date' => now()->addDays(2),
             'guests_adults' => 1,
             'guests_children' => 0,
+        ]);
+        $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking1->id, [
             'rating' => 7
         ]);
-        Booking::create([
+        $booking2 = Booking::create([
             'apartment_id' => $apartment2->id,
             'user_id' => $user1->id,
             'start_date' => now()->addDay(),
             'end_date' => now()->addDays(2),
             'guests_adults' => 1,
             'guests_children' => 0,
+        ]);
+        $this->actingAs($user1)->putJson('/api/user/bookings/' . $booking2->id, [
             'rating' => 9
         ]);
-        Booking::create([
+        $booking3 = Booking::create([
             'apartment_id' => $apartment2->id,
             'user_id' => $user2->id,
             'start_date' => now()->addDay(),
@@ -482,21 +480,14 @@ class PropertySearchTest extends TestCase
             'guests_children' => 0,
             'rating' => 7
         ]);
-        Booking::create([
-            'apartment_id' => $apartment3->id,
-            'user_id' => $user2->id,
-            'start_date' => now()->addDay(4),
-            'end_date' => now()->addDays(7),
-            'guests_adults' => 1,
-            'guests_children' => 0,
-            'rating' => 8
+        $this->actingAs($user2)->putJson('/api/user/bookings/' . $booking3->id, [
+            'rating' => 7
         ]);
 
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
         $response->assertStatus(200);
         $response->assertJsonCount(2, 'properties.data');
-        
-        $this->assertEquals(8, $response->json('properties')['data'][0]['avg_rating']);
-        $this->assertEquals(7, $response->json('properties')['data'][1]['avg_rating']);
+        $this->assertEquals(8, $response->json('properties.data')[0]['avg_rating']);
+        $this->assertEquals(7, $response->json('properties.data')[1]['avg_rating']);
     }
 }

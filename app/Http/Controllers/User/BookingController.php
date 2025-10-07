@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Http\Resources\BookingResource;
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdatePropertyRatingJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -50,6 +51,8 @@ class BookingController extends Controller
         }
 
         $booking->update($request->validated());
+
+        dispatch(new UpdatePropertyRatingJob($booking));
 
         return new BookingResource($booking);
     }

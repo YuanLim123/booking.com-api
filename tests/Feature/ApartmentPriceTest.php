@@ -177,28 +177,28 @@ class ApartmentPriceTest extends TestCase
         // First case - no price range: both returned
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
         $response->assertStatus(200);
-        $response->assertJsonCount(2, 'properties');
+        $response->assertJsonCount(2, 'properties.data');
 
         // First case - min price set: 1 returned
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&price_from=100');
         $response->assertStatus(200);
-        $response->assertJsonCount(1, 'properties');
+        $response->assertJsonCount(1, 'properties.data');
         $response->assertJsonFragment(['id' => $property2->id]);
 
         // Second case - max price set: 1 returned
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&price_to=100');
         $response->assertStatus(200);
-        $response->assertJsonCount(1, 'properties');
+        $response->assertJsonCount(1, 'properties.data');
         $response->assertJsonFragment(['id' => $property->id]);
 
         // Third case - both min and max price set: 2 returned
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&price_from=50&price_to=150');
         $response->assertStatus(200);
-        $response->assertJsonCount(2, 'properties');
+        $response->assertJsonCount(2, 'properties.data');
 
         // Fourth case - both min and max price set narrow: 0 returned
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1&price_from=80&price_to=100');
         $response->assertStatus(200);
-        $response->assertJsonCount(0, 'properties');
+        $response->assertJsonCount(0, 'properties.data');
     }
 }

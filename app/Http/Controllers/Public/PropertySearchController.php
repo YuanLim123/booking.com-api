@@ -18,20 +18,22 @@ class PropertySearchController extends Controller
             ->with([
                 'city',
                 'apartments.apartmentType',
-                'apartments.rooms.beds.bedType',
+                'apartments.beds',
+                //'apartments.rooms.beds.bedType',
+                'apartments.beds.bedType',
                 'apartments.prices' => function ($query) use ($request) {
                     $query->validForRange([
                         $request->start_date ?? now()->addDay()->toDateString(),
                         $request->end_date ?? now()->addDays(2)->toDateString(),
                     ]);
                 },
+                'facilities',
                 'media' => function ($query) {
                     $query
                         ->orderBy('position');
                 },
             ])
-            ->withCount('bookings')
-            ->withAvg('bookings', 'rating')
+            // ->withCount('bookings')
             ->when($request->city, function ($query) use ($request) {
                 $query->where('city_id', $request->city);
             })
@@ -55,9 +57,14 @@ class PropertySearchController extends Controller
                 }
             })
             ->when($request->adults && $request->children, function ($query) use ($request) {
-                $query->withWherehas('apartments', function ($query) use ($request) {
+                $query->withWhereHas('apartments', function ($query) use ($request) {
                     $query->where('capacity_adults', '>=', $request->adults)
                         ->where('capacity_children', '>=', $request->children)
+                        ->when($request->start_date && $request->end_date, function ($query) use ($request) {
+                            $query->whereDoesntHave('bookings', function ($q) use ($request) {
+                                $q->validForRange([$request->start_date, $request->end_date]);
+                            });
+                        })
                         ->orderBy('capacity_adults')
                         ->orderBy('capacity_children')
                         ->take(1);
@@ -77,19 +84,23 @@ class PropertySearchController extends Controller
                 $query->whereHas('apartments.prices', function ($query) use ($request) {
                     $query->where('price', '<=', $request->price_to);
                 });
-            })
-            ->orderBy('bookings_avg_rating', 'desc');
+            });
 
         $facilities = Facility::query()
             ->whereNull('category_id')
             ->withCount(['properties' => function ($query) use ($propertiesQuery) {
                 $query->whereIn('id', $propertiesQuery->pluck('id'));
             }])
-            ->where('properties_count', '>', 0)
             ->get()
+            ->where('properties_count', '>', 0)
+            ->sortByDesc('properties_count')
             ->pluck('properties_count', 'name');
 
-        $properties = $propertiesQuery->paginate(10)->withQueryString();
+        $properties = $propertiesQuery
+            //withAvg('bookings', 'rating')
+            ->orderBy('bookings_avg_rating', 'desc')
+            ->paginate(10)
+            ->withQueryString();
 
         return [
             'properties' => PropertySearchResource::collection($properties)

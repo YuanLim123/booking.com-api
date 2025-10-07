@@ -6,6 +6,7 @@ use App\Models\Property;
 use App\Models\Apartment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ApartmentSeeder extends Seeder
 {
@@ -24,7 +25,7 @@ class ApartmentSeeder extends Seeder
             ];
  
             if ($i % 500 == 0 || $i == $count) {
-                Apartment::insert($apartments);
+                DB::table('apartments')->insert($apartments);
                 $apartments = [];
             }
         }

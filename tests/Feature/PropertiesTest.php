@@ -92,7 +92,7 @@ class PropertiesTest extends TestCase
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
 
         $response->assertStatus(200);
-        $response->assertJsonCount(1, 'properties');
+        $response->assertJsonCount(1, 'properties.data');
         $response->assertJsonFragment(['id' => $propertyWithLargeApartment->id]);
     }
 
@@ -126,8 +126,8 @@ class PropertiesTest extends TestCase
         $response = $this->getJson('/api/search?city=' . $cityId . '&adults=2&children=1');
 
         $response->assertStatus(200);
-        $response->assertJsonCount(1, 'properties.0.apartments');
-        $response->assertJsonPath('properties.0.apartments.0.name', $largeApartment->name);
+        $response->assertJsonCount(1, 'properties.data.0.apartments');
+        $response->assertJsonPath('properties.data.0.apartments.0.name', $largeApartment->name);
     }
 
     public function test_property_owner_can_add_photo_to_property()

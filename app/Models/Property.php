@@ -23,6 +23,7 @@ class Property extends Model implements HasMedia
         'address_postcode',
         'lat',
         'long',
+        'bookings_avg_rating',
     ];
 
     public function city()
