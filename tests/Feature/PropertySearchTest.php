@@ -43,7 +43,7 @@ class PropertySearchTest extends TestCase
 
     public function test_property_search_by_city_returns_correct_results(): void
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cities = City::take(2)->pluck('id');
         $propertyInCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[0]]);
         $propertyInAnotherCity = Property::factory()->create(['owner_id' => $owner->id, 'city_id' => $cities[1]]);
@@ -56,7 +56,7 @@ class PropertySearchTest extends TestCase
 
     public function test_property_search_by_country_returns_correct_results(): void
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $countries = Country::with('cities')->take(2)->get();
         $propertyInCountry = Property::factory()->create([
             'owner_id' => $owner->id,
@@ -101,7 +101,7 @@ class PropertySearchTest extends TestCase
 
     public function test_property_search_beds_list_all_cases(): void
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $roomTypes = RoomType::all();
         $bedTypes = BedType::all();
@@ -239,7 +239,7 @@ class PropertySearchTest extends TestCase
 
     public function test_property_search_returns_one_best_apartment_per_property()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
@@ -298,7 +298,7 @@ class PropertySearchTest extends TestCase
 
     public function test_property_search_filters_by_facilities(): void
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
@@ -350,7 +350,7 @@ class PropertySearchTest extends TestCase
 
     public function test_property_search_return_most_popular_property_facilities_count_in_desc_order(): void
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
@@ -425,7 +425,7 @@ class PropertySearchTest extends TestCase
 
     public function test_properties_show_correct_rating_and_ordered_by_it()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,

@@ -38,7 +38,7 @@ class PropertiesTest extends TestCase
 
     public function test_property_owner_has_access_to_properties_feature()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $response = $this->actingAs($owner)->getJson('/api/owner/properties');
 
         $response->assertStatus(200);
@@ -46,15 +46,15 @@ class PropertiesTest extends TestCase
 
     public function test_user_does_not_have_access_to_properties_feature()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_USER]);
-        $response = $this->actingAs($owner)->getJson('/api/owner/properties');
+        $user = User::factory()->user()->create();
+        $response = $this->actingAs($user)->getJson('/api/owner/properties');
 
         $response->assertStatus(403);
     }
 
     public function test_property_owner_can_add_property()
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $response = $this->actingAs($owner)->postJson('/api/owner/properties', [
             'name' => 'My property',
             'city_id' => City::value('id'),
@@ -68,7 +68,7 @@ class PropertiesTest extends TestCase
 
     public function test_property_search_by_capacity_returns_correct_results(): void
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $propertyWithSmallApartment = Property::factory()->create([
             'owner_id' => $owner->id,
@@ -98,7 +98,7 @@ class PropertiesTest extends TestCase
 
     public function test_property_search_by_capacity_returns_only_suitable_apartments(): void
     {
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
@@ -134,7 +134,7 @@ class PropertiesTest extends TestCase
     {
         Storage::fake('public');
 
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
@@ -159,7 +159,7 @@ class PropertiesTest extends TestCase
     {
         Storage::fake('public');
 
-        $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
+        $owner = User::factory()->owner()->create();
         $cityId = City::value('id');
         $property = Property::factory()->create([
             'owner_id' => $owner->id,
