@@ -8,12 +8,23 @@ use App\Http\Resources\ApartmentDetailsResource;
 use App\Models\Apartment;
 use Illuminate\Http\Request;
 
+/**
+ * @group Public
+ * @subgroup Apartments
+ */
 class ApartmentController extends Controller
 {
+    /**
+     * Get apartment details
+     *
+     * [Returns details about a specific apartment]
+     *
+     * @response {"name":"Large apartment","type":null,"size":null,"beds_list":"","bathrooms":0,"facility_categories":{"First category":["First facility","Second facility"],"Second category":["Third facility"]}}
+     */
     public function __invoke(Apartment $apartment)
     {
         $apartment->load('facilities.category');
- 
+
         // put it in model class as getFacilityCategoriesAttribute
         // $apartment->setAttribute(
         //     'facility_categories',
