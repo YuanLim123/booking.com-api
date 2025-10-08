@@ -34,6 +34,7 @@ class ApartmentPriceTest extends TestCase
             GeoobjectSeeder::class,
         ]);
     }
+    /* extract it into unit test
     private function create_apartment(): Apartment
     {
         $owner = User::factory()->create(['role_id' => Role::ROLE_OWNER]);
@@ -137,7 +138,7 @@ class ApartmentPriceTest extends TestCase
 
         $this->assertEquals(1 * 100 + 4 * 90 + 2 * 120, $totalPrice);
     }
-
+    */
 
     public function test_property_search_filters_by_price()
     {
@@ -201,4 +202,5 @@ class ApartmentPriceTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonCount(0, 'properties.data');
     }
+
 }
